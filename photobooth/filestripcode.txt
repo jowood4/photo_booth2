@@ -1,0 +1,23 @@
+#Capture the image from Python camera
+                        camera.capture(os.path.join(imagefolder,filename))
+                        #create a Python image library object from the image captured
+                        im4 = PIL.Image.open(os.path.join(imagefolder,filename))
+                        #Load your default template mine is a 1200 x 1800 pixel image otherwise you will have to change sizes below.
+                        #Same was done for the other 3 image objects im, im2 and im3
+                        bgimage = PIL.Image.open("/home/pi/Desktop/template.jpg")
+                        # Thumbnail the images to make small images to paste onto the template
+                        im.thumbnail((1120,800))
+                        im2.thumbnail((1120,800))
+                        im3.thumbnail((1120,800))
+         im4.thumbnail((1120,800))
+                        # Paste the images in order, 2 copies of the same image in my case, 2 columns (2 strips of images per 6x4)
+                        bgimage.paste(im,(15,120))
+                        bgimage.paste(im2,(15,900))
+                        bgimage.paste(im3,(15,1700))
+         bgimage.paste(im4,(15,2600))
+                        bgimage.paste(im,(1235,120))
+                        bgimage.paste(im2,(1235,900))
+                        bgimage.paste(im3,(1235,1700))
+         bgimage.paste(im4,(1235,2600))
+                        #Save the final image
+                        bgimage.save(os.path.join(imagefolder,"Final_"+`imagecounter`+".jpg"))
