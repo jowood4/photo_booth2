@@ -8,8 +8,8 @@ import glob
 import time
 import traceback
 from time import sleep
-#import RPi.GPIO as GPIO #using physical pin numbering change in future?
-#import picamera # http://picamera.readthedocs.org/en/release-1.4/install2.html
+import RPi.GPIO as GPIO #using physical pin numbering change in future?
+import picamera # http://picamera.readthedocs.org/en/release-1.4/install2.html
 import atexit
 import sys, getopt
 import socket
@@ -32,7 +32,7 @@ button1_pin = 22 # pin for the big red button
 button2_pin = 7 # pin for button to shutdown the pi 
 button3_pin = 11 # pin for button to end the program, but not shutdown the pi
 
-post_online = 1 # default 1. Change to 0 if you don't want to upload pics.
+post_online = 0 # default 1. Change to 0 if you don't want to upload pics.
 total_pics = 4 # number of pics to be taken
 capture_delay = 2 # delay between pics
 prep_delay = 5 # number of seconds at step 1 as users prep to have photo taken
@@ -75,17 +75,17 @@ real_path = os.path.dirname(os.path.realpath(__file__))
 #################
 
 def cleanup():
-  print('Ended abruptly')
-atexit.register(cleanup)
+	print('Ended abruptly')
+	atexit.register(cleanup)
 
 def shut_it_down(channel):  
-    print "Shutting down..." 
-    os.system("sudo halt")
+	print "Shutting down..." 
+	os.system("sudo halt")
 
 def exit_photobooth(channel):
-    print "Photo booth app ended. RPi still running" 
-    time.sleep(3)
-    sys.exit()
+	print "Photo booth app ended. RPi still running" 
+	time.sleep(3)
+	sys.exit()
     
 def clear_pics(foo): #why is this function being passed an arguments?
     #delete files in folder on startup
@@ -97,31 +97,31 @@ def clear_pics(foo): #why is this function being passed an arguments?
 
       
 def is_connected():
-  try:
+	try:
     # see if we can resolve the host name -- tells us if there is
     # a DNS listening
-    host = socket.gethostbyname(test_server)
+		host = socket.gethostbyname(test_server)
     # connect to the host -- tells us if the host is actually
     # reachable
-    s = socket.create_connection((host, 80), 2)
-    return True
-  except:
-     pass
-  return False    
+		s = socket.create_connection((host, 80), 2)
+		return True
+	except:
+		pass
+	return False    
 
 def init_pygame():
-    pygame.init()
-    size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
-    pygame.display.set_caption('Photo Booth Pics')
-    pygame.mouse.set_visible(False) #hide the mouse cursor	
-    return pygame.display.set_mode(size, pygame.FULLSCREEN)
+	pygame.init()
+	size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
+	pygame.display.set_caption('Photo Booth Pics')
+	pygame.mouse.set_visible(False) #hide the mouse cursor	
+	return pygame.display.set_mode(size, pygame.FULLSCREEN)
 
 def show_image(image_path):
-    screen = init_pygame()
-    img=pygame.image.load(image_path) 
-    img = pygame.transform.scale(img,(transform_x,transfrom_y))
-    screen.blit(img,(offset_x,offset_y))
-    pygame.display.flip()
+	screen = init_pygame()
+	img=pygame.image.load(image_path) 
+	img = pygame.transform.scale(img,(transform_x,transfrom_y))
+	screen.blit(img,(offset_x,offset_y))
+	pygame.display.flip()
 
 def create_mosaic(jpg_group): 
 	now = jpg_group 
@@ -167,19 +167,18 @@ def display_pics(jpg_group):
     # this section is an unbelievable nasty hack - for some reason Pygame
     # needs a keyboardinterrupt to initialise in some limited circs (second time running)
 
-    class Alarm(Exception):
-        pass
-    def alarm_handler(signum, frame):
-        raise Alarm
-    signal(SIGALRM, alarm_handler)
-    alarm(3)
-    try:
-        screen = init_pygame()
-
-        alarm(0)
-    except Alarm:
-        raise KeyboardInterrupt
-    for i in range(0, replay_cycles): #show pics a few times
+	class Alarm(Exception):
+        	pass
+	def alarm_handler(signum, frame):
+        	raise Alarm
+	signal(SIGALRM, alarm_handler)
+	alarm(3)
+	try:
+		screen = init_pygame()
+		alarm(0)
+	except Alarm:
+		raise KeyboardInterrupt
+	for i in range(0, replay_cycles): #show pics a few times
 		for i in range(1, total_pics+1): #show each pic
 			filename = config.file_path + jpg_group + "-0" + str(i) + ".jpg"
                         show_image(filename);
@@ -322,5 +321,5 @@ print "Photo booth app running..."
 show_image(real_path + "/assets/intro.png");
 
 while True:
-		time.sleep(0.2) #debounce
-		start_photobooth()
+	time.sleep(0.2) #debounce
+	start_photobooth()
