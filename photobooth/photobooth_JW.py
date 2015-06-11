@@ -15,6 +15,7 @@ import sys, getopt
 import socket
 import pygame
 import cups
+import Image, ImageDraw
 #import pytumblr # https://github.com/tumblr/pytumblr
 #from twython import Twython
 import config
@@ -134,7 +135,7 @@ def create_mosaic(jpg_group):
 	print "Resizing Pics..." #necessary?
 	#convert -resize 968x648 /home/pi/photobooth/pics/*.jpg /home/pi/photobooth/pics_tmp/*_tmp.jpg
 	graphicsmagick = "gm mogrify -resize 968x648 " + config.file_path + now + "*.jpg"
-	copypics = "cp " + file_path + now + "*.jpg "+ file_path
+	copypics = "cp " + config.file_path + now + "*.jpg "+ config.file_path
 	
 	#print "Resizing with command: " + graphicsmagick
 	os.system(graphicsmagick)
@@ -195,7 +196,7 @@ def start_photobooth():
 
 	show_image(real_path + "/assets/blank.png")
 	
-	#camera = picamera.PiCamera()
+	camera = picamera.PiCamera()
 	pixel_width = 1000 #originally 500: use a smaller size to process faster, and tumblr will only take up to 500 pixels wide for animated gifs
 	#pixel_height = monitor_h * pixel_width // monitor_w #optimize for monitor size
 	pixel_height = 666
@@ -229,8 +230,11 @@ def start_photobooth():
 	else:
 		show_image(real_path + "/assets/processing.png")
 
-	graphicsmagick = "gm convert -size 500x333 -delay " + str(gif_delay) + " " + config.file_path + now + "*.jpg " + config.file_path + now + ".gif" 
-	os.system(graphicsmagick) #make the .gif
+	#graphicsmagick = "gm convert -size 500x333 -delay " + str(gif_delay) + " " + config.file_path + now + "*.jpg " + config.file_path + now + ".gif" 
+	#os.system(graphicsmagick) #make the .gif
+	im = Image.open(config.file_path + now + "-01.jpg")
+	im.save(config.file_path + now + "-01.gif")
+
 	print "Uploading to tumblr. Please check " + config.tumblr_blog + ".tumblr.com soon."
 
 	if post_online: # turn off posting pics online in the variable declarations at the top of this document
