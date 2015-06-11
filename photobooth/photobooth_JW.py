@@ -20,6 +20,7 @@ import cups
 import config
 import shutil
 from signal import alarm, signal, SIGALRM, SIGKILL
+import Image, ImageDraw
 
 ########################
 ### Variables Config ###
@@ -148,7 +149,30 @@ def create_mosaic(jpg_group):
 	print "Adding Label..."
 	graphicsmagick = "gm convert -append "+real_path+ "/assets/bn_booth_label_h.jpg  " + config.file_path + now + "_picmontage.jpg " + config.file_path + now + "_print.jpg" 
 	#print "Adding label with command: " + graphicsmagick 
-	os.system(graphicsmagick) 
+	os.system(graphicsmagick)
+
+	image = list()
+	image.append(Image.open(config.file_path + now + '-01.jpg'))
+	image.append(Image.open(config.file_path + now + '-02.jpg'))
+	image.append(Image.open(config.file_path + now + '-03.jpg'))
+	image.append(Image.open(config.file_path + now + '-04.jpg'))
+
+	x_pic = 500
+	y_pic = 375
+	x_border = 40
+	y_border = 10
+	x_total = 1181
+	y_total = 1748
+	new_pic = Image.new('RGB', (x_total, y_total))
+	new_pic.paste(image[0].resize((x_pic,y_pic), Image.ANTIALIAS), (x_border,y_border))
+	new_pic.paste(image[1].resize((x_pic,y_pic), Image.ANTIALIAS), (x_border,1*y_pic+2*y_border))
+	new_pic.paste(image[2].resize((x_pic,y_pic), Image.ANTIALIAS), (x_border,2*y_pic+3*y_border))
+	new_pic.paste(image[3].resize((x_pic,y_pic), Image.ANTIALIAS), (x_border,3*y_pic+4*y_border))
+	new_pic.paste(image[0].resize((x_pic,y_pic), Image.ANTIALIAS), (x_total-x_border-x_pic,y_border))
+	new_pic.paste(image[1].resize((x_pic,y_pic), Image.ANTIALIAS), (x_total-x_border-x_pic,1*y_pic+2*y_border))
+	new_pic.paste(image[2].resize((x_pic,y_pic), Image.ANTIALIAS), (x_total-x_border-x_pic,2*y_pic+3*y_border))
+	new_pic.paste(image[3].resize((x_pic,y_pic), Image.ANTIALIAS), (x_total-x_border-x_pic,3*y_pic+4*y_border))
+	new_pic.save(config.file_path + now + '_total.jpg')
 
 def print_pics(jpg_group): 
 	now = jpg_group
