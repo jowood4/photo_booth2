@@ -259,7 +259,9 @@ def start_photobooth():
 	print "Taking pics" 
 	now = time.strftime("%Y-%m-%d-%H:%M:%S") #get the current date and time for the start of the filename
 	try: #take the photos
-		for i, filename in enumerate(camera.capture_continuous(config.file_path + now + '-' + '{counter:02d}.jpg')):
+		#for i, filename in enumerate(camera.capture_continuous(config.file_path + now + '-' + '{counter:02d}.jpg')):
+		for i, filename in range(0, total_pics)
+			camera.capture(config.file_path + now + '-0' + i + '.jpg')
 			GPIO.output(led2_pin,True) #turn on the LED
 			print(filename)
 			sleep(0.25) #pause the LED on for just a bit
@@ -284,9 +286,8 @@ def start_photobooth():
 	im = Image.open(config.file_path + now + "-01.jpg")
 	im.save(config.file_path + now + "-01.gif")
 
-	print "Uploading to tumblr. Please check " + config.tumblr_blog + ".tumblr.com soon."
-
 	if post_online: # turn off posting pics online in the variable declarations at the top of this document
+		print "Uploading to tumblr. Please check " + config.tumblr_blog + ".tumblr.com soon."
 		connected = is_connected() #check to see if you have an internet connection
 		while connected: 
 			try:
