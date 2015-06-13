@@ -69,8 +69,21 @@ real_path = os.path.dirname(os.path.realpath(__file__))
 #	config.twitter_ACCESS_SECRET,
 #); 
 
-
-
+####################
+### Other Config ###
+####################
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(led1_pin,GPIO.OUT) # LED 1
+GPIO.setup(led2_pin,GPIO.OUT) # LED 2
+GPIO.setup(led3_pin,GPIO.OUT) # LED 3
+GPIO.setup(led4_pin,GPIO.OUT) # LED 4
+GPIO.setup(button1_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP) # falling edge detection on button 1
+GPIO.setup(button2_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP) # falling edge detection on button 2
+GPIO.setup(button3_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP) # falling edge detection on button 3
+GPIO.output(led1_pin,False);
+GPIO.output(led2_pin,False);
+GPIO.output(led3_pin,False);
+GPIO.output(led4_pin,False);
 
 #################
 ### Functions ###
@@ -78,14 +91,20 @@ real_path = os.path.dirname(os.path.realpath(__file__))
 
 def cleanup():
 	print('Ended abruptly')
+	GPIO.cleanup()
 	atexit.register(cleanup)
 
 def shut_it_down(channel):  
 	print "Shutting down..." 
+	GPIO.output(led1_pin,True)
+	GPIO.output(led2_pin,True)
+	GPIO.output(led3_pin,True)
+	GPIO.output(led4_pin,True)
 	os.system("sudo halt")
 
 def exit_photobooth(channel):
-	print "Photo booth app ended. RPi still running" 
+	print "Photo booth app ended. RPi still running"
+	GPIO.output(led1_pin,True) 
 	time.sleep(3)
 	sys.exit()
     
@@ -96,7 +115,10 @@ def clear_pics(foo): #why is this function being passed an arguments?
 		os.remove(f) 
 	#light the lights in series to show completed
 	print "Deleted previous pics"
-
+	GPIO.output(led1_pin,False) #turn off the lights
+	GPIO.output(led2_pin,False)
+	GPIO.output(led3_pin,False)
+	GPIO.output(led4_pin,False)
       
 def is_connected():
 	try:
@@ -215,8 +237,10 @@ def start_photobooth():
 	################################# Begin Step 1 ################################# 
 	show_image(real_path + "/assets/blank.png")
 	print "Get Ready"
+	GPIO.output(led1_pin,True);
 	show_image(real_path + "/assets/instructions.png")
-	sleep(prep_delay) 
+	sleep(prep_delay)
+	GPIO.output(led1_pin,False)
 
 	show_image(real_path + "/assets/blank.png")
 	
@@ -236,10 +260,10 @@ def start_photobooth():
 	now = time.strftime("%Y-%m-%d-%H:%M:%S") #get the current date and time for the start of the filename
 	try: #take the photos
 		for i, filename in enumerate(camera.capture_continuous(config.file_path + now + '-' + '{counter:02d}.jpg')):
-			#GPIO.output(led2_pin,True) #turn on the LED
+			GPIO.output(led2_pin,True) #turn on the LED
 			print(filename)
 			sleep(0.25) #pause the LED on for just a bit
-			#GPIO.output(led2_pin,False) #turn off the LED
+			GPIO.output(led2_pin,False) #turn off the LED
 			sleep(capture_delay) # pause in-between shots
 			if i == total_pics-1:
 				break
@@ -248,11 +272,12 @@ def start_photobooth():
 		camera.close()
 	########################### Begin Step 3 #################################
 
-	print "Creating an animated gif" 
+	print "Creating an animated gif"
 	if post_online:
 		show_image(real_path + "/assets/uploading.png")
 	else:
 		show_image(real_path + "/assets/processing.png")
+	GPIO.output(led3_pin,True) #turn on the LED
 
 	#graphicsmagick = "gm convert -size 500x333 -delay " + str(gif_delay) + " " + config.file_path + now + "*.jpg " + config.file_path + now + ".gif" 
 	#os.system(graphicsmagick) #make the .gif
@@ -287,6 +312,7 @@ def start_photobooth():
 	########################### Begin Step 4 #################################
 	printflag = False
 	tweetflag = False
+	GPIO.output(led4_pin,True) #turn on the LED
 	try:
 		display_pics(now)
 	except Exception, e:
@@ -317,7 +343,7 @@ def start_photobooth():
 	
 	pygame.quit()
 	print "Done"
-
+	GPIO.output(led4_pin,False) #turn off the LED
 	if post_online:
 		show_image(real_path + "/assets/finished_connected.png")
 	else:
@@ -325,7 +351,8 @@ def start_photobooth():
 	
 	time.sleep(restart_delay)
 	show_image(real_path + "/assets/intro.png");
-
+	GPIO.add_event_detect(button2_pin, GPIO.FALLING, callback=shut_it_down, bouncetime=300) 
+	GPIO.add_event_detect(button3_pin, GPIO.FALLING, callback=exit_photobooth, bouncetime=300)
 
 ####################
 ### Main Program ###
@@ -344,7 +371,16 @@ files = glob.glob(config.file_path + '*')
 for f in files:
 	os.remove(f)
 
-print "Photo booth app running..." 
+print "Photo booth app running..."
+GPIO.output(led1_pin,True); #light up the lights to show the app is running
+GPIO.output(led2_pin,True);
+GPIO.output(led3_pin,True);
+GPIO.output(led4_pin,True);
+time.sleep(3)
+GPIO.output(led1_pin,False); #turn off the lights
+GPIO.output(led2_pin,False);
+GPIO.output(led3_pin,False);
+GPIO.output(led4_pin,False);
 
 show_image(real_path + "/assets/intro.png");
 
