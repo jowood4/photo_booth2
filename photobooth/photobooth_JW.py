@@ -261,7 +261,7 @@ def start_photobooth():
 	try: #take the photos
 		#for i, filename in enumerate(camera.capture_continuous(config.file_path + now + '-' + '{counter:02d}.jpg')):
 		for i in range(0, total_pics):
-			filename = config.file_path + now + '-0' + i + '.jpg'
+			filename = config.file_path + now + '-0' + str(i) + '.jpg'
 			camera.capture(filename)
 			GPIO.output(led2_pin,True) #turn on the LED
 			print(filename)
