@@ -56,7 +56,7 @@ def show_image(image_path, screen):
 
 
 pygame.init()
-raise KeyboardInterrupt
+#raise KeyboardInterrupt
 size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 pygame.display.set_caption('Photo Booth Pics')
 pygame.mouse.set_visible(False) #hide the mouse cursor	
