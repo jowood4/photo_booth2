@@ -126,8 +126,8 @@ camera.hflip = False
 
 img = Image.new("RGB", (pixel_width, pixel_height))
 draw = ImageDraw.Draw(img)
-font = ImageFont.load("arial.pil")
-draw.text((10,10), "Hello", (0, 255, 0), font=font)
+#font = ImageFont.load("arial.pil")
+draw.text((10,10), "Hello", (0, 255, 0))
 
 camera.start_preview()
 overlay_renderer = camera.add_overlay(img.tostring(),layer=3,size=img.size,alpha=128);
