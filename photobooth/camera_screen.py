@@ -65,10 +65,9 @@ def show_image(image_path):
 ################################# Begin Step 1 ################################# 
 show_image(real_path + "/assets/blank.png")
 print "Get Ready"
-GPIO.output(led1_pin,True);
+
 show_image(real_path + "/assets/instructions.png")
 sleep(prep_delay)
-GPIO.output(led1_pin,False)
 
 show_image(real_path + "/assets/blank.png")
 
@@ -128,10 +127,10 @@ try: #take the photos
 	for i in range(0, total_pics):
 		filename = config.file_path + now + '-0' + str(i+1) + '.jpg'
 		camera.capture(filename)
-		GPIO.output(led2_pin,True) #turn on the LED
+		
 		print(filename)
 		sleep(0.25) #pause the LED on for just a bit
-		GPIO.output(led2_pin,False) #turn off the LED
+		
 		sleep(capture_delay) # pause in-between shots
 		if i == total_pics-1:
 			break
