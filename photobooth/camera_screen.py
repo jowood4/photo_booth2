@@ -126,7 +126,7 @@ camera.hflip = False
 
 img = Image.new("RGBA", (200, 100))
 draw = ImageDraw.Draw(img)
-font = ImageFont.truetype("sans-serif.ttf", 32)
+font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSerif.ttf", 32)
 draw.text((10,10), "Hello", (0, 255, 0), font=font)
 
 camera.start_preview()
