@@ -126,12 +126,12 @@ text = font.render("Hello There", 1, (0, 200, 0))
 
 
 stream = io.BytesIO()
-camera.capture(stream, use_video_port=True, format='rgb', resize=(320, 240))
+camera.capture(stream, use_video_port=True, format='rgb', resize=(monitor_w, monitor_h))
 stream.seek(0)
 stream.readinto(rgb)
 stream.close()
 
-img = pygame.image.frombuffer(rgb[0:(320 * 240 * 3)], (320, 240), 'RGB')
+img = pygame.image.frombuffer(rgb[0:(monitor_w * monitor_h * 3)], (monitor_w, monitor_h), 'RGB')
 screen.blit(img,(offset_x,offset_y))
 
 screen.blit(text, (100,100))
