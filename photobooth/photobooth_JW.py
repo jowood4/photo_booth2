@@ -253,6 +253,7 @@ def start_photobooth():
 	camera.hflip = False
 	camera.start_preview()
 
+	screen = pygame.display.set_mode((150, 50))
 	background = pygame.Surface(screen.get_size())
 	background = background.convert()
 
