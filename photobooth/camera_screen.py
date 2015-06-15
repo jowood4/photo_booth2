@@ -55,10 +55,40 @@ def show_image(image_path, screen):
 	pygame.display.flip()
 
 
-pygame.init()
+
+
+
+disp_no = os.getenv("DISPLAY")
+if disp_no:
+    print "I'm running under X display = {0}".format(disp_no)
+
+# Check which frame buffer drivers are available
+# Start with fbcon since directfb hangs with composite output
+drivers = ['fbcon', 'directfb', 'svgalib']
+found = False
+for driver in drivers:
+    # Make sure that SDL_VIDEODRIVER is set
+    if not os.getenv('SDL_VIDEODRIVER'):
+        os.putenv('SDL_VIDEODRIVER', driver)
+    try:
+        pygame.display.init()
+    except pygame.error:
+        print 'Driver: {0} failed.'.format(driver)
+        continue
+    found = True
+    break
+
+if not found:
+    raise Exception('No suitable video driver found!')
+
+
+
+
+
+#pygame.init()
 #raise KeyboardInterrupt
 size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
-pygame.display.set_caption('Photo Booth Pics')
+#pygame.display.set_caption('Photo Booth Pics')
 pygame.mouse.set_visible(False) #hide the mouse cursor	
 screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
 ################################# Begin Step 1 ################################# 
@@ -88,7 +118,7 @@ sizeData = [ # Camera parameters for different size settings
  [(1440, 1080), (320, 240), (0.2222, 0.2222, 0.5556, 0.5556)]] # Small
 sizeMode = 0
 
-screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
+#screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
 #background = pygame.Surface(screen.get_size())
 #background = background.convert()
 
@@ -111,7 +141,7 @@ stream.close()
 yuv2rgb.convert(yuv, rgb, monitor_w, monitor_h)
 img = pygame.image.frombuffer(rgb[0: (monitor_w * monitor_h * 3)], (monitor_w,monitor_h), 'RGB')
 
-screen.blit(img, ((pixel_width - img.get_width() ) / 2, (pixel_height - img.get_height()) / 2))
+screen.blit(img, (offset_x,offset_y))
 screen.blit(text, (100,100))
 pygame.display.update()
 while True:
