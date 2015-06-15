@@ -99,12 +99,10 @@ screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
 #textpos = text.get_rect()
 #textpos.centerx = background.get_rect().centerx
 
-screen = init_pygame()
-img=pygame.image.load(image_path) 
-img = pygame.transform.scale(img,(transform_x,transfrom_y))
-screen.blit(img,(offset_x,offset_y))
-
-
+#screen = init_pygame()
+#img=pygame.image.load(image_path) 
+#img = pygame.transform.scale(img,(transform_x,transfrom_y))
+#screen.blit(img,(offset_x,offset_y))
 
 sleep(2) #warm up camera
 
