@@ -124,7 +124,7 @@ camera.hflip = False
 #font = pygame.font.Font(None, 36)
 #text = font.render("Hello There", 1, (0, 200, 0))
 
-img = Image.new("RGBA", (pixel_width, pixel_height))
+img = Image.new("JPG", (pixel_width, pixel_height))
 draw = ImageDraw.Draw(img)
 #font = ImageFont.load("arial.pil")
 draw.text((10,10), "Hello", (0, 255, 0))
@@ -166,6 +166,8 @@ print "Taking pics"
 	#		break
 
 #finally:
+
+sleep(capture_delay)
 
 camera.stop_preview()
 camera.close()
