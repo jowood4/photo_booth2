@@ -99,6 +99,12 @@ sleep(prep_delay)
 
 show_image(real_path + "/assets/blank.png", screen)
 
+
+
+
+
+
+
 camera = picamera.PiCamera()
 pixel_width = 1000 #originally 500: use a smaller size to process faster, and tumblr will only take up to 500 pixels wide for animated gifs
 #pixel_height = monitor_h * pixel_width // monitor_w #optimize for monitor size
@@ -108,39 +114,26 @@ camera.vflip = False
 camera.hflip = False
 #camera.start_preview()
 
-rgb = bytearray(pixel_width * pixel_height * 3)
-yuv = bytearray(pixel_width * pixel_height * 3 / 2)
-sizeData = [ # Camera parameters for different size settings
- # Full res      Viewfinder  Crop window
- [(1000, 666), (monitor_w, monitor_h), (0.0   , 0.0   , 1.0   , 1.0   )], # Large
- [(1920, 1080), (320, 180), (0.1296, 0.2222, 0.7408, 0.5556)], # Med
- [(1440, 1080), (320, 240), (0.2222, 0.2222, 0.5556, 0.5556)]] # Small
-sizeMode = 0
+# prep a byte array to store captured image
+rgb = bytearray(camera.resolution[0] * camera.resolution[1] * 3)
 
-#screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
-#background = pygame.Surface(screen.get_size())
-#background = background.convert()
+
+
 
 # Display some text
 font = pygame.font.Font(None, 36)
 text = font.render("Hello There", 1, (0, 200, 0))
 
-#screen = init_pygame()
-#img=pygame.image.load(image_path) 
-#img = pygame.transform.scale(img,(transform_x,transfrom_y))
-#screen.blit(img,(offset_x,offset_y))
 
-sleep(2) #warm up camera
-
-stream = io.BytesIO() # Capture into in-memory stream
-camera.capture(stream, use_video_port=True, format='raw')
+stream = io.BytesIO()
+camera.capture(stream, use_video_port=True, format='rgb', resize=(320, 240))
 stream.seek(0)
-stream.readinto(yuv)  # stream -> YUV buffer
+stream.readinto(rgb)
 stream.close()
-yuv2rgb.convert(yuv, rgb, monitor_w, monitor_h)
-img = pygame.image.frombuffer(rgb[0: (monitor_w * monitor_h * 3)], (monitor_w,monitor_h), 'RGB')
 
-screen.blit(img, (offset_x,offset_y))
+img = pygame.image.frombuffer(rgb[0:(320 * 240 * 3)], (320, 240), 'RGB')
+screen.blit(img,(offset_x,offset_y))
+
 screen.blit(text, (100,100))
 pygame.display.update()
 while True:
