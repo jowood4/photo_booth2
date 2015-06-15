@@ -84,7 +84,7 @@ rgb = bytearray(pixel_width * pixel_height * 3)
 yuv = bytearray(pixel_width * pixel_height * 3 / 2)
 sizeData = [ # Camera parameters for different size settings
  # Full res      Viewfinder  Crop window
- [(1000, 666), (monitor_x, monitor_y), (0.0   , 0.0   , 1.0   , 1.0   )], # Large
+ [(1000, 666), (monitor_w, monitor_h), (0.0   , 0.0   , 1.0   , 1.0   )], # Large
  [(1920, 1080), (320, 180), (0.1296, 0.2222, 0.7408, 0.5556)], # Med
  [(1440, 1080), (320, 240), (0.2222, 0.2222, 0.5556, 0.5556)]] # Small
 sizeMode = 0
