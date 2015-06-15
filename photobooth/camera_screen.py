@@ -134,14 +134,34 @@ stream.close()
 img = pygame.image.frombuffer(rgb[0:(monitor_w * monitor_h * 3)], (monitor_w, monitor_h), 'RGB')
 screen.blit(img,(offset_x,offset_y))
 
-screen.blit(text, (100,100))
+screen.blit(text, (monitor_w/2,monitor_h/2))
 pygame.display.update()
-while True:
-	#GPIO.wait_for_edge(button1_pin, GPIO.FALLING)
-	time.sleep(0.2) #debounce
-
-################################# Begin Step 2 #################################
 print "Taking pics" 
+now = time.strftime("%Y-%m-%d-%H:%M:%S") #get the current date and time for the start of the filename
+try: #take the photos
+	#for i, filename in enumerate(camera.capture_continuous(config.file_path + now + '-' + '{counter:02d}.jpg')):
+	for i in range(0, total_pics):
+		filename = config.file_path + now + '-0' + str(i+1) + '.jpg'
+		camera.capture(filename)
+		GPIO.output(led2_pin,True) #turn on the LED
+		print(filename)
+		sleep(0.25) #pause the LED on for just a bit
+		GPIO.output(led2_pin,False) #turn off the LED
+		sleep(capture_delay) # pause in-between shots
+		if i == total_pics-1:
+			break
+		stream = io.BytesIO()
+		camera.capture(stream, use_video_port=True, format='rgb', resize=(monitor_w, monitor_h))
+		stream.seek(0)
+		stream.readinto(rgb)
+		stream.close()
+
+		img = pygame.image.frombuffer(rgb[0:(monitor_w * monitor_h * 3)], (monitor_w, monitor_h), 'RGB')
+		screen.blit(img,(offset_x,offset_y))
+
+		screen.blit(text, (monitor_w/2,monitor_h/2))
+		pygame.display.update()
+finally:
 
 camera.stop_preview()
 camera.close()
