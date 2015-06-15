@@ -46,15 +46,9 @@ offset_y = 0 # how far off to left corner to display photos
 replay_delay = 1 # how much to wait in-between showing pics on-screen after taking
 replay_cycles = 1 # how many times to show each photo on-screen after taking
 
-def init_pygame():
-	#pygame.init()
-	size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
-	pygame.display.set_caption('Photo Booth Pics')
-	pygame.mouse.set_visible(False) #hide the mouse cursor	
-	return pygame.display.set_mode(size, pygame.FULLSCREEN)
 
-def show_image(image_path):
-	screen = init_pygame()
+def show_image(image_path, screen):
+	#screen = init_pygame()
 	img=pygame.image.load(image_path) 
 	img = pygame.transform.scale(img,(transform_x,transfrom_y))
 	screen.blit(img,(offset_x,offset_y))
@@ -62,6 +56,10 @@ def show_image(image_path):
 
 
 pygame.init()
+size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
+pygame.display.set_caption('Photo Booth Pics')
+pygame.mouse.set_visible(False) #hide the mouse cursor	
+screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
 ################################# Begin Step 1 ################################# 
 show_image(real_path + "/assets/blank.png")
 print "Get Ready"
@@ -95,7 +93,7 @@ screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
 
 # Display some text
 font = pygame.font.Font(None, 36)
-text = font.render("Hello There", 1, (10, 10, 10))
+text = font.render("Hello There", 1, (0, 200, 0))
 
 #screen = init_pygame()
 #img=pygame.image.load(image_path) 
