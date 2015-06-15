@@ -126,7 +126,7 @@ camera.hflip = False
 
 img = Image.new("RGB", (pixel_width, pixel_height))
 draw = ImageDraw.Draw(img)
-font = ImageFont.truetype("arial.ttf", 15)
+font = ImageFont.load("arial.pil")
 draw.text((10,10), "Hello", (0, 255, 0), font=font)
 
 camera.start_preview()
