@@ -61,13 +61,13 @@ pygame.display.set_caption('Photo Booth Pics')
 pygame.mouse.set_visible(False) #hide the mouse cursor	
 screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
 ################################# Begin Step 1 ################################# 
-show_image(real_path + "/assets/blank.png")
+show_image(real_path + "/assets/blank.png", screen)
 print "Get Ready"
 
-show_image(real_path + "/assets/instructions.png")
+show_image(real_path + "/assets/instructions.png", screen)
 sleep(prep_delay)
 
-show_image(real_path + "/assets/blank.png")
+show_image(real_path + "/assets/blank.png", screen)
 
 camera = picamera.PiCamera()
 pixel_width = 1000 #originally 500: use a smaller size to process faster, and tumblr will only take up to 500 pixels wide for animated gifs
