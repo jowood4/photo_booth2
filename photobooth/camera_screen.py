@@ -58,81 +58,81 @@ def show_image(image_path):
 	screen.blit(img,(offset_x,offset_y))
 	pygame.display.flip()
 
-def start_photobooth(): 
-
-	################################# Begin Step 1 ################################# 
-	show_image(real_path + "/assets/blank.png")
-	print "Get Ready"
-	GPIO.output(led1_pin,True);
-	show_image(real_path + "/assets/instructions.png")
-	sleep(prep_delay)
-	GPIO.output(led1_pin,False)
-
-	show_image(real_path + "/assets/blank.png")
-	
-	camera = picamera.PiCamera()
-	pixel_width = 1000 #originally 500: use a smaller size to process faster, and tumblr will only take up to 500 pixels wide for animated gifs
-	#pixel_height = monitor_h * pixel_width // monitor_w #optimize for monitor size
-	pixel_height = 666
-	camera.resolution = (pixel_width, pixel_height) 
-	camera.vflip = False
-	camera.hflip = False
-	#camera.start_preview()
-
-	rgb = bytearray(pixel_width * pixel_height * 3)
-	yuv = bytearray(pixel_width * pixel_height * 3 / 2)
-	sizeData = [ # Camera parameters for different size settings
-	 # Full res      Viewfinder  Crop window
-	 [(2592, 1944), (320, 240), (0.0   , 0.0   , 1.0   , 1.0   )], # Large
-	 [(1920, 1080), (320, 180), (0.1296, 0.2222, 0.7408, 0.5556)], # Med
-	 [(1440, 1080), (320, 240), (0.2222, 0.2222, 0.5556, 0.5556)]] # Small
-	sizeMode = 0
-
-	screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
-	#background = pygame.Surface(screen.get_size())
-	#background = background.convert()
-
-	# Display some text
-	#font = pygame.font.Font(None, 36)
-	#text = font.render("Hello There", 1, (10, 10, 10))
-	#textpos = text.get_rect()
-	#textpos.centerx = background.get_rect().centerx
-	
-	screen = init_pygame()
-	img=pygame.image.load(image_path) 
-	img = pygame.transform.scale(img,(transform_x,transfrom_y))
-	screen.blit(img,(offset_x,offset_y))
 
 
+################################# Begin Step 1 ################################# 
+show_image(real_path + "/assets/blank.png")
+print "Get Ready"
+GPIO.output(led1_pin,True);
+show_image(real_path + "/assets/instructions.png")
+sleep(prep_delay)
+GPIO.output(led1_pin,False)
 
-	sleep(2) #warm up camera
+show_image(real_path + "/assets/blank.png")
 
-	stream = io.BytesIO() # Capture into in-memory stream
-	camera.capture(stream, use_video_port=True, format='raw')
-	stream.seek(0)
-	stream.readinto(yuv)  # stream -> YUV buffer
-	stream.close()
-	yuv2rgb.convert(yuv, rgb, sizeData[sizeMode][1][0], sizeData[sizeMode][1][1])
-	img = pygame.image.frombuffer(rgb[0: (sizeData[sizeMode][1][0] * sizeData[sizeMode][1][1] * 3)], sizeData[sizeMode][1], 'RGB')
+camera = picamera.PiCamera()
+pixel_width = 1000 #originally 500: use a smaller size to process faster, and tumblr will only take up to 500 pixels wide for animated gifs
+#pixel_height = monitor_h * pixel_width // monitor_w #optimize for monitor size
+pixel_height = 666
+camera.resolution = (pixel_width, pixel_height) 
+camera.vflip = False
+camera.hflip = False
+#camera.start_preview()
 
-	#background.blit(text, textpos)
-	screen.blit(img, ((pixel_width - img.get_width() ) / 2, (pixel_height - img.get_height()) / 2))
+rgb = bytearray(pixel_width * pixel_height * 3)
+yuv = bytearray(pixel_width * pixel_height * 3 / 2)
+sizeData = [ # Camera parameters for different size settings
+ # Full res      Viewfinder  Crop window
+ [(2592, 1944), (320, 240), (0.0   , 0.0   , 1.0   , 1.0   )], # Large
+ [(1920, 1080), (320, 180), (0.1296, 0.2222, 0.7408, 0.5556)], # Med
+ [(1440, 1080), (320, 240), (0.2222, 0.2222, 0.5556, 0.5556)]] # Small
+sizeMode = 0
 
-	################################# Begin Step 2 #################################
-	print "Taking pics" 
-	now = time.strftime("%Y-%m-%d-%H:%M:%S") #get the current date and time for the start of the filename
-	try: #take the photos
-		#for i, filename in enumerate(camera.capture_continuous(config.file_path + now + '-' + '{counter:02d}.jpg')):
-		for i in range(0, total_pics):
-			filename = config.file_path + now + '-0' + str(i+1) + '.jpg'
-			camera.capture(filename)
-			GPIO.output(led2_pin,True) #turn on the LED
-			print(filename)
-			sleep(0.25) #pause the LED on for just a bit
-			GPIO.output(led2_pin,False) #turn off the LED
-			sleep(capture_delay) # pause in-between shots
-			if i == total_pics-1:
-				break
-	finally:
-		camera.stop_preview()
-		camera.close()
+screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
+#background = pygame.Surface(screen.get_size())
+#background = background.convert()
+
+# Display some text
+#font = pygame.font.Font(None, 36)
+#text = font.render("Hello There", 1, (10, 10, 10))
+#textpos = text.get_rect()
+#textpos.centerx = background.get_rect().centerx
+
+screen = init_pygame()
+img=pygame.image.load(image_path) 
+img = pygame.transform.scale(img,(transform_x,transfrom_y))
+screen.blit(img,(offset_x,offset_y))
+
+
+
+sleep(2) #warm up camera
+
+stream = io.BytesIO() # Capture into in-memory stream
+camera.capture(stream, use_video_port=True, format='raw')
+stream.seek(0)
+stream.readinto(yuv)  # stream -> YUV buffer
+stream.close()
+yuv2rgb.convert(yuv, rgb, sizeData[sizeMode][1][0], sizeData[sizeMode][1][1])
+img = pygame.image.frombuffer(rgb[0: (sizeData[sizeMode][1][0] * sizeData[sizeMode][1][1] * 3)], sizeData[sizeMode][1], 'RGB')
+
+#background.blit(text, textpos)
+screen.blit(img, ((pixel_width - img.get_width() ) / 2, (pixel_height - img.get_height()) / 2))
+
+################################# Begin Step 2 #################################
+print "Taking pics" 
+now = time.strftime("%Y-%m-%d-%H:%M:%S") #get the current date and time for the start of the filename
+try: #take the photos
+	#for i, filename in enumerate(camera.capture_continuous(config.file_path + now + '-' + '{counter:02d}.jpg')):
+	for i in range(0, total_pics):
+		filename = config.file_path + now + '-0' + str(i+1) + '.jpg'
+		camera.capture(filename)
+		GPIO.output(led2_pin,True) #turn on the LED
+		print(filename)
+		sleep(0.25) #pause the LED on for just a bit
+		GPIO.output(led2_pin,False) #turn off the LED
+		sleep(capture_delay) # pause in-between shots
+		if i == total_pics-1:
+			break
+finally:
+	camera.stop_preview()
+	camera.close()
