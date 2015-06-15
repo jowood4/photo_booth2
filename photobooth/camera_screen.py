@@ -124,7 +124,7 @@ camera.hflip = False
 #font = pygame.font.Font(None, 36)
 #text = font.render("Hello There", 1, (0, 200, 0))
 
-img = Image.new("RGB", (200, 100))
+img = Image.new("RGBA", (200, 100))
 draw = ImageDraw.Draw(img)
 #font = ImageFont.load("arial.pil")
 draw.text((10,10), "Hello", (0, 255, 0))
