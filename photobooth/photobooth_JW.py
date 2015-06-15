@@ -284,7 +284,7 @@ def start_photobooth():
 	img = pygame.image.frombuffer(rgb[0: (sizeData[sizeMode][1][0] * sizeData[sizeMode][1][1] * 3)], sizeData[sizeMode][1], 'RGB')
 
 	#background.blit(text, textpos)
-	screen.blit(img, ((320 - img.get_width() ) / 2, (240 - img.get_height()) / 2))
+	screen.blit(img, ((pixel_width - img.get_width() ) / 2, (pixel_heights - img.get_height()) / 2))
 
 	################################# Begin Step 2 #################################
 	print "Taking pics" 
