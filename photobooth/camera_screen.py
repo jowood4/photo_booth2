@@ -114,6 +114,9 @@ img = pygame.image.frombuffer(rgb[0: (monitor_w * monitor_h * 3)], (monitor_w,mo
 screen.blit(img, ((pixel_width - img.get_width() ) / 2, (pixel_height - img.get_height()) / 2))
 screen.blit(text, (100,100))
 pygame.display.update()
+while True:
+	#GPIO.wait_for_edge(button1_pin, GPIO.FALLING)
+	time.sleep(0.2) #debounce
 
 ################################# Begin Step 2 #################################
 print "Taking pics" 
