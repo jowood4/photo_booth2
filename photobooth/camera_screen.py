@@ -24,6 +24,14 @@ import shutil
 from signal import alarm, signal, SIGALRM, SIGKILL
 import Image, ImageDraw
 
+
+def show_image(image_path, screen):
+	#screen = init_pygame()
+	img=pygame.image.load(image_path) 
+	img = pygame.transform.scale(img,(transform_x,transfrom_y))
+	screen.blit(img,(offset_x,offset_y))
+	pygame.display.flip()
+
 real_path = os.path.dirname(os.path.realpath(__file__))
 
 ########################
@@ -49,9 +57,9 @@ replay_cycles = 1 # how many times to show each photo on-screen after taking
 
 
 
-disp_no = os.getenv("DISPLAY")
-if disp_no:
-    print "I'm running under X display = {0}".format(disp_no)
+#disp_no = os.getenv("DISPLAY")
+#if disp_no:
+#    print "I'm running under X display = {0}".format(disp_no)
 
 # Check which frame buffer drivers are available
 # Start with fbcon since directfb hangs with composite output
@@ -145,10 +153,5 @@ print "Taking pics"
 camera.stop_preview()
 camera.close()
 
-def show_image(image_path, screen):
-	#screen = init_pygame()
-	img=pygame.image.load(image_path) 
-	img = pygame.transform.scale(img,(transform_x,transfrom_y))
-	screen.blit(img,(offset_x,offset_y))
-	pygame.display.flip()
+
 
