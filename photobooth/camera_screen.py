@@ -126,8 +126,8 @@ camera.hflip = False
 
 img = Image.new("RGBA", (200, 100))
 draw = ImageDraw.Draw(img)
-#font = ImageFont.load("arial.pil")
-draw.text((10,10), "Hello", (0, 255, 0))
+font = ImageFont.truetype("sans-serif.ttf", 32)
+draw.text((10,10), "Hello", (0, 255, 0), font=font)
 
 camera.start_preview()
 overlay_renderer = camera.add_overlay(img.tostring(),layer=3,size=img.size,alpha=128);
@@ -167,7 +167,7 @@ print "Taking pics"
 
 #finally:
 
-sleep(capture_delay)
+sleep(10)
 
 camera.stop_preview()
 camera.close()
