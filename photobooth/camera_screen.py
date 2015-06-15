@@ -112,7 +112,7 @@ stream.close()
 yuv2rgb.convert(yuv, rgb, sizeData[sizeMode][1][0], sizeData[sizeMode][1][1])
 img = pygame.image.frombuffer(rgb[0: (sizeData[sizeMode][1][0] * sizeData[sizeMode][1][1] * 3)], sizeData[sizeMode][1], 'RGB')
 
-screen.blit(text, (100,100)
+screen.blit(text, (100,100))
 screen.blit(img, ((pixel_width - img.get_width() ) / 2, (pixel_height - img.get_height()) / 2))
 
 ################################# Begin Step 2 #################################
