@@ -47,15 +47,6 @@ replay_delay = 1 # how much to wait in-between showing pics on-screen after taki
 replay_cycles = 1 # how many times to show each photo on-screen after taking
 
 
-def show_image(image_path, screen):
-	#screen = init_pygame()
-	img=pygame.image.load(image_path) 
-	img = pygame.transform.scale(img,(transform_x,transfrom_y))
-	screen.blit(img,(offset_x,offset_y))
-	pygame.display.flip()
-
-
-
 
 
 disp_no = os.getenv("DISPLAY")
@@ -153,3 +144,11 @@ print "Taking pics"
 
 camera.stop_preview()
 camera.close()
+
+def show_image(image_path, screen):
+	#screen = init_pygame()
+	img=pygame.image.load(image_path) 
+	img = pygame.transform.scale(img,(transform_x,transfrom_y))
+	screen.blit(img,(offset_x,offset_y))
+	pygame.display.flip()
+
