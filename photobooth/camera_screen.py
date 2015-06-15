@@ -147,20 +147,13 @@ try: #take the photos
 		print(filename)
 		sleep(0.25) #pause the LED on for just a bit
 		GPIO.output(led2_pin,False) #turn off the LED
+		img = pygame.image.load(filename)
+    		screen.blit(img, (0, 0))
+		pygame.display.update()
 		sleep(capture_delay) # pause in-between shots
 		if i == total_pics-1:
 			break
-		stream = io.BytesIO()
-		camera.capture(stream, use_video_port=True, format='rgb', resize=(monitor_w, monitor_h))
-		stream.seek(0)
-		stream.readinto(rgb)
-		stream.close()
 
-		img = pygame.image.frombuffer(rgb[0:(monitor_w * monitor_h * 3)], (monitor_w, monitor_h), 'RGB')
-		screen.blit(img,(offset_x,offset_y))
-
-		screen.blit(text, (monitor_w/2,monitor_h/2))
-		pygame.display.update()
 finally:
 
 	camera.stop_preview()
