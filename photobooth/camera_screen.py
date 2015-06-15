@@ -84,7 +84,7 @@ if not found:
 
 
 
-#pygame.init()
+pygame.init()
 #raise KeyboardInterrupt
 size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 #pygame.display.set_caption('Photo Booth Pics')
