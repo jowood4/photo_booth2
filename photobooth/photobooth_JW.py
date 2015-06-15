@@ -254,8 +254,8 @@ def start_photobooth():
 	camera.hflip = False
 	#camera.start_preview()
 
-	rgb = bytearray(320 * 240 * 3)
-	yuv = bytearray(320 * 240 * 3 / 2)
+	rgb = bytearray(pixel_width * pixel_height * 3)
+	yuv = bytearray(pixel_width * pixel_height * 3 / 2)
 	sizeData = [ # Camera parameters for different size settings
 	 # Full res      Viewfinder  Crop window
 	 [(2592, 1944), (320, 240), (0.0   , 0.0   , 1.0   , 1.0   )], # Large
@@ -264,14 +264,14 @@ def start_photobooth():
 	sizeMode = 0
 
 	screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
-	background = pygame.Surface(screen.get_size())
-	background = background.convert()
+	#background = pygame.Surface(screen.get_size())
+	#background = background.convert()
 
 	# Display some text
-	font = pygame.font.Font(None, 36)
-	text = font.render("Hello There", 1, (10, 10, 10))
-	textpos = text.get_rect()
-	textpos.centerx = background.get_rect().centerx
+	#font = pygame.font.Font(None, 36)
+	#text = font.render("Hello There", 1, (10, 10, 10))
+	#textpos = text.get_rect()
+	#textpos.centerx = background.get_rect().centerx
 	
 	sleep(2) #warm up camera
 
@@ -283,7 +283,7 @@ def start_photobooth():
 	yuv2rgb.convert(yuv, rgb, sizeData[sizeMode][1][0], sizeData[sizeMode][1][1])
 	img = pygame.image.frombuffer(rgb[0: (sizeData[sizeMode][1][0] * sizeData[sizeMode][1][1] * 3)], sizeData[sizeMode][1], 'RGB')
 
-	background.blit(text, textpos)
+	#background.blit(text, textpos)
 	screen.blit(img, ((320 - img.get_width() ) / 2, (240 - img.get_height()) / 2))
 
 	################################# Begin Step 2 #################################
