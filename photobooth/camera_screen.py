@@ -163,8 +163,8 @@ try: #take the photos
 		pygame.display.update()
 finally:
 
-camera.stop_preview()
-camera.close()
+	camera.stop_preview()
+	camera.close()
 
 
 
