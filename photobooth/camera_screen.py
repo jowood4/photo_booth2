@@ -24,6 +24,8 @@ import shutil
 from signal import alarm, signal, SIGALRM, SIGKILL
 import Image, ImageDraw
 
+real_path = os.path.dirname(os.path.realpath(__file__))
+
 ########################
 ### Variables Config ###
 ########################
