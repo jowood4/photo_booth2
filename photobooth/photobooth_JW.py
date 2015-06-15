@@ -15,6 +15,7 @@ import sys, getopt
 import socket
 import pygame
 import cups
+import io, yuv2rgb
 import Image, ImageDraw
 #import pytumblr # https://github.com/tumblr/pytumblr
 #from twython import Twython
@@ -251,9 +252,9 @@ def start_photobooth():
 	camera.resolution = (pixel_width, pixel_height) 
 	camera.vflip = False
 	camera.hflip = False
-	camera.start_preview()
+	#camera.start_preview()
 
-	screen = pygame.display.set_mode((150, 50))
+	screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
 	background = pygame.Surface(screen.get_size())
 	background = background.convert()
 
@@ -262,9 +263,19 @@ def start_photobooth():
 	text = font.render("Hello There", 1, (10, 10, 10))
 	textpos = text.get_rect()
 	textpos.centerx = background.get_rect().centerx
-	background.blit(text, textpos)
 	
 	sleep(2) #warm up camera
+
+	stream = io.BytesIO() # Capture into in-memory stream
+	camera.capture(stream, use_video_port=True, format='raw')
+	stream.seek(0)
+	stream.readinto(yuv)  # stream -> YUV buffer
+	stream.close()
+	yuv2rgb.convert(yuv, rgb, sizeData[sizeMode][1][0], sizeData[sizeMode][1][1])
+	img = pygame.image.frombuffer(rgb[0: (sizeData[sizeMode][1][0] * sizeData[sizeMode][1][1] * 3)], sizeData[sizeMode][1], 'RGB')
+
+	background.blit(text, textpos)
+	screen.blit(img, ((320 - img.get_width() ) / 2, (240 - img.get_height()) / 2))
 
 	################################# Begin Step 2 #################################
 	print "Taking pics" 
