@@ -256,6 +256,12 @@ def start_photobooth():
 
 	rgb = bytearray(320 * 240 * 3)
 	yuv = bytearray(320 * 240 * 3 / 2)
+	sizeData = [ # Camera parameters for different size settings
+	 # Full res      Viewfinder  Crop window
+	 [(2592, 1944), (320, 240), (0.0   , 0.0   , 1.0   , 1.0   )], # Large
+	 [(1920, 1080), (320, 180), (0.1296, 0.2222, 0.7408, 0.5556)], # Med
+	 [(1440, 1080), (320, 240), (0.2222, 0.2222, 0.5556, 0.5556)]] # Small
+	sizeMode = 0
 
 	screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
 	background = pygame.Surface(screen.get_size())
