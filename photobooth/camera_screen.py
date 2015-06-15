@@ -77,7 +77,7 @@ pixel_height = 666
 camera.resolution = (pixel_width, pixel_height) 
 camera.vflip = False
 camera.hflip = False
-camera.start_preview()
+#camera.start_preview()
 
 rgb = bytearray(pixel_width * pixel_height * 3)
 yuv = bytearray(pixel_width * pixel_height * 3 / 2)
@@ -111,8 +111,9 @@ stream.close()
 yuv2rgb.convert(yuv, rgb, monitor_w, monitor_h)
 img = pygame.image.frombuffer(rgb[0: (monitor_w * monitor_h * 3)], (monitor_w,monitor_h), 'RGB')
 
-screen.blit(text, (100,100))
 screen.blit(img, ((pixel_width - img.get_width() ) / 2, (pixel_height - img.get_height()) / 2))
+screen.blit(text, (100,100))
+pygame.display.update()
 
 ################################# Begin Step 2 #################################
 print "Taking pics" 
