@@ -56,6 +56,7 @@ def show_image(image_path, screen):
 
 
 pygame.init()
+raise KeyboardInterrupt
 size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 pygame.display.set_caption('Photo Booth Pics')
 pygame.mouse.set_visible(False) #hide the mouse cursor	
@@ -107,27 +108,14 @@ camera.capture(stream, use_video_port=True, format='raw')
 stream.seek(0)
 stream.readinto(yuv)  # stream -> YUV buffer
 stream.close()
-yuv2rgb.convert(yuv, rgb, sizeData[sizeMode][1][0], sizeData[sizeMode][1][1])
-img = pygame.image.frombuffer(rgb[0: (sizeData[sizeMode][1][0] * sizeData[sizeMode][1][1] * 3)], sizeData[sizeMode][1], 'RGB')
+yuv2rgb.convert(yuv, rgb, monitor_w, monitor_h)
+img = pygame.image.frombuffer(rgb[0: (monitor_w * monitor_h * 3)], (monitor_w,monitor_h), 'RGB')
 
 screen.blit(text, (100,100))
 screen.blit(img, ((pixel_width - img.get_width() ) / 2, (pixel_height - img.get_height()) / 2))
 
 ################################# Begin Step 2 #################################
 print "Taking pics" 
-now = time.strftime("%Y-%m-%d-%H:%M:%S") #get the current date and time for the start of the filename
-try: #take the photos
-	#for i, filename in enumerate(camera.capture_continuous(config.file_path + now + '-' + '{counter:02d}.jpg')):
-	for i in range(0, total_pics):
-		filename = config.file_path + now + '-0' + str(i+1) + '.jpg'
-		camera.capture(filename)
-		
-		print(filename)
-		sleep(0.25) #pause the LED on for just a bit
-		
-		sleep(capture_delay) # pause in-between shots
-		if i == total_pics-1:
-			break
-finally:
-	camera.stop_preview()
-	camera.close()
+
+camera.stop_preview()
+camera.close()
