@@ -46,7 +46,7 @@ monitor_w = 800 #800
 monitor_h = 480 #480
 transform_x = 640 #640 # how wide to scale the jpg when replaying
 transfrom_y = 480 #480 # how high to scale the jpg when replaying
-offset_x = 80 # how far off to left corner to display photos
+offset_x = 40 # how far off to left corner to display photos
 offset_y = 0 # how far off to left corner to display photos
 replay_delay = 1 # how much to wait in-between showing pics on-screen after taking
 replay_cycles = 1 # how many times to show each photo on-screen after taking
@@ -252,39 +252,11 @@ def start_photobooth():
 	camera.resolution = (pixel_width, pixel_height) 
 	camera.vflip = False
 	camera.hflip = False
-	#camera.start_preview()
+	camera.start_preview()
 
-	rgb = bytearray(pixel_width * pixel_height * 3)
-	yuv = bytearray(pixel_width * pixel_height * 3 / 2)
-	sizeData = [ # Camera parameters for different size settings
-	 # Full res      Viewfinder  Crop window
-	 [(2592, 1944), (320, 240), (0.0   , 0.0   , 1.0   , 1.0   )], # Large
-	 [(1920, 1080), (320, 180), (0.1296, 0.2222, 0.7408, 0.5556)], # Med
-	 [(1440, 1080), (320, 240), (0.2222, 0.2222, 0.5556, 0.5556)]] # Small
-	sizeMode = 0
 
-	screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
-	#background = pygame.Surface(screen.get_size())
-	#background = background.convert()
 
-	# Display some text
-	#font = pygame.font.Font(None, 36)
-	#text = font.render("Hello There", 1, (10, 10, 10))
-	#textpos = text.get_rect()
-	#textpos.centerx = background.get_rect().centerx
-	
 	sleep(2) #warm up camera
-
-	stream = io.BytesIO() # Capture into in-memory stream
-	camera.capture(stream, use_video_port=True, format='raw')
-	stream.seek(0)
-	stream.readinto(yuv)  # stream -> YUV buffer
-	stream.close()
-	yuv2rgb.convert(yuv, rgb, sizeData[sizeMode][1][0], sizeData[sizeMode][1][1])
-	img = pygame.image.frombuffer(rgb[0: (sizeData[sizeMode][1][0] * sizeData[sizeMode][1][1] * 3)], sizeData[sizeMode][1], 'RGB')
-
-	#background.blit(text, textpos)
-	screen.blit(img, ((pixel_width - img.get_width() ) / 2, (pixel_height - img.get_height()) / 2))
 
 	################################# Begin Step 2 #################################
 	print "Taking pics" 
@@ -418,5 +390,6 @@ GPIO.output(led4_pin,False);
 show_image(real_path + "/assets/intro.png");
 
 while True:
+	#GPIO.wait_for_edge(button1_pin, GPIO.FALLING)
 	time.sleep(0.2) #debounce
 	start_photobooth()
