@@ -254,6 +254,9 @@ def start_photobooth():
 	camera.hflip = False
 	#camera.start_preview()
 
+	rgb = bytearray(320 * 240 * 3)
+	yuv = bytearray(320 * 240 * 3 / 2)
+
 	screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
 	background = pygame.Surface(screen.get_size())
 	background = background.convert()
