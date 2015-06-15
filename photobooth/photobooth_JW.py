@@ -252,6 +252,16 @@ def start_photobooth():
 	camera.vflip = False
 	camera.hflip = False
 	camera.start_preview()
+
+	background = pygame.Surface(screen.get_size())
+	background = background.convert()
+
+	# Display some text
+	font = pygame.font.Font(None, 36)
+	text = font.render("Hello There", 1, (10, 10, 10))
+	textpos = text.get_rect()
+	textpos.centerx = background.get_rect().centerx
+	background.blit(text, textpos)
 	
 	sleep(2) #warm up camera
 
