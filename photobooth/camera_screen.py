@@ -47,7 +47,7 @@ replay_delay = 1 # how much to wait in-between showing pics on-screen after taki
 replay_cycles = 1 # how many times to show each photo on-screen after taking
 
 def init_pygame():
-	pygame.init()
+	#pygame.init()
 	size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 	pygame.display.set_caption('Photo Booth Pics')
 	pygame.mouse.set_visible(False) #hide the mouse cursor	
@@ -61,7 +61,7 @@ def show_image(image_path):
 	pygame.display.flip()
 
 
-
+pygame.init()
 ################################# Begin Step 1 ################################# 
 show_image(real_path + "/assets/blank.png")
 print "Get Ready"
@@ -94,10 +94,10 @@ screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
 #background = background.convert()
 
 # Display some text
-#font = pygame.font.Font(None, 36)
-#text = font.render("Hello There", 1, (10, 10, 10))
-#textpos = text.get_rect()
-#textpos.centerx = background.get_rect().centerx
+font = pygame.font.Font(None, 36)
+text = font.render("Hello There", 1, (10, 10, 10))
+textpos = text.get_rect()
+textpos.centerx = background.get_rect().centerx
 
 #screen = init_pygame()
 #img=pygame.image.load(image_path) 
@@ -114,7 +114,7 @@ stream.close()
 yuv2rgb.convert(yuv, rgb, sizeData[sizeMode][1][0], sizeData[sizeMode][1][1])
 img = pygame.image.frombuffer(rgb[0: (sizeData[sizeMode][1][0] * sizeData[sizeMode][1][1] * 3)], sizeData[sizeMode][1], 'RGB')
 
-#background.blit(text, textpos)
+screen.blit(text, textpos)
 screen.blit(img, ((pixel_width - img.get_width() ) / 2, (pixel_height - img.get_height()) / 2))
 
 ################################# Begin Step 2 #################################
