@@ -16,7 +16,7 @@ import socket
 import pygame
 import cups
 import io, yuv2rgb
-import Image, ImageDraw
+import Image, ImageDraw, ImageFont
 #import pytumblr # https://github.com/tumblr/pytumblr
 #from twython import Twython
 import config
