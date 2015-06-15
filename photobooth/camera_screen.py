@@ -115,50 +115,60 @@ camera.hflip = False
 #camera.start_preview()
 
 # prep a byte array to store captured image
-rgb = bytearray(camera.resolution[0] * camera.resolution[1] * 3)
+#rgb = bytearray(camera.resolution[0] * camera.resolution[1] * 3)
 
 
 
 
 # Display some text
-font = pygame.font.Font(None, 36)
-text = font.render("Hello There", 1, (0, 200, 0))
+#font = pygame.font.Font(None, 36)
+#text = font.render("Hello There", 1, (0, 200, 0))
+
+img = Image.new("RGB", (pixel_width, pixel_height))
+draw = ImageDraw.Draw(img)
+font = ImageFont.truetype("arial.ttf", 15)
+draw.text((10,10), "Hello", (0, 255, 0), font=font)
+
+camera.start_preview()
+overlay_renderer = camera.add_overlay(img.tostring(),layer=3,size=img.size,alpha=128);
 
 
-stream = io.BytesIO()
-camera.capture(stream, use_video_port=True, format='rgb', resize=(monitor_w, monitor_h))
-stream.seek(0)
-stream.readinto(rgb)
-stream.close()
+#stream = io.BytesIO()
+#camera.capture(stream, use_video_port=True, format='rgb', resize=(monitor_w, monitor_h))
+#stream.seek(0)
+#stream.readinto(rgb)
+#stream.close()
 
-img = pygame.image.frombuffer(rgb[0:(monitor_w * monitor_h * 3)], (monitor_w, monitor_h), 'RGB')
-screen.blit(img,(offset_x,offset_y))
+#img = pygame.image.frombuffer(rgb[0:(monitor_w * monitor_h * 3)], (monitor_w, monitor_h), 'RGB')
+#screen.blit(img,(offset_x,offset_y))
 
-screen.blit(text, (offset_x,offset_y))
-pygame.display.update()
+#screen.blit(text, (offset_x,offset_y))
+#pygame.display.update()
 
 print "Taking pics" 
-now = time.strftime("%Y-%m-%d-%H:%M:%S") #get the current date and time for the start of the filename
-try: #take the photos
+#now = time.strftime("%Y-%m-%d-%H:%M:%S") #get the current date and time for the start of the filename
+#try: #take the photos
 	#for i, filename in enumerate(camera.capture_continuous(config.file_path + now + '-' + '{counter:02d}.jpg')):
-	print "Taking pics" 
-	for i in range(0, total_pics):
-		filename = config.file_path + now + '-0' + str(i+1) + '.jpg'
-		print(filename)
-		camera.capture(filename)
-		GPIO.output(led2_pin,True) #turn on the LED
-		print(filename)
-		sleep(0.25) #pause the LED on for just a bit
-		GPIO.output(led2_pin,False) #turn off the LED
-		img = pygame.image.load(filename)
-    		screen.blit(img, (0, 0))
-		pygame.display.update()
-		sleep(capture_delay) # pause in-between shots
-		if i == total_pics-1:
-			break
+	#print "Taking pics" 
+	#for i in range(0, total_pics):
+	#	filename = config.file_path + now + '-0' + str(i+1) + '.jpg'
+	#	print(filename)
+	#	camera.capture(filename)
+	#	GPIO.output(led2_pin,True) #turn on the LED
+	#	print(filename)
+	#	sleep(0.25) #pause the LED on for just a bit
+	#	GPIO.output(led2_pin,False) #turn off the LED
+	#	img = pygame.image.load(filename)
+    	#	screen.blit(img, (0, 0))
+	#	pygame.display.update()
+	#	sleep(capture_delay) # pause in-between shots
+	#	if i == total_pics-1:
+	#		break
 
-finally:
-	camera.close()
+#finally:
+
+camera.stop_preview()
+camera.close()
 
 
 
