@@ -372,9 +372,6 @@ def start_photobooth():
 		show_image(real_path + "/assets/finished_offline.png")
 	
 	time.sleep(restart_delay)
-	show_image(real_path + "/assets/intro.png");
-	GPIO.add_event_detect(button2_pin, GPIO.FALLING, callback=shut_it_down, bouncetime=300) 
-	GPIO.add_event_detect(button3_pin, GPIO.FALLING, callback=exit_photobooth, bouncetime=300)
 
 ####################
 ### Main Program ###
@@ -424,12 +421,14 @@ GPIO.output(led1_pin,False); #turn off the lights
 GPIO.output(led2_pin,False);
 GPIO.output(led3_pin,False);
 GPIO.output(led4_pin,False);
+GPIO.add_event_detect(button2_pin, GPIO.FALLING, callback=shut_it_down, bouncetime=300) 
+GPIO.add_event_detect(button3_pin, GPIO.FALLING, callback=exit_photobooth, bouncetime=300)
 
 show_image(real_path + "/assets/intro.png");
 
 try:
 	while True:
-		GPIO.wait_for_edge(button1_pin, GPIO.FALLING)
+		#GPIO.wait_for_edge(button1_pin, GPIO.FALLING)
 		time.sleep(0.2) #debounce
 		start_photobooth()
 finally:
