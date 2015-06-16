@@ -103,7 +103,7 @@ camera.resolution = (pixel_width, pixel_height)
 camera.vflip = False
 camera.hflip = False
 
-font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSerif.ttf", 128)
+font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSerif.ttf", 200)
 
 overlay_renderer = None
 
@@ -114,7 +114,7 @@ print "Taking pics"
 now = time.strftime("%Y-%m-%d-%H:%M:%S") #get the current date and time for the start of the filename
 try: #take the photos
 	for i in range(0, total_pics):
-		for j in range(0,3):
+		for j in range(3,0):
 			img = Image.new("RGB", (1024, 768))
 			draw = ImageDraw.Draw(img)
 			draw.text((pixel_width/2,pixel_height/2), str(j), (255, 255, 255), font=font)
@@ -123,6 +123,10 @@ try: #take the photos
 			else:
 				overlay_renderer.update(img.tostring())
 			sleep(1)
+		img = Image.new("RGB", (1024, 768))
+		draw = ImageDraw.Draw(img)
+		draw.text((pixel_width/2,pixel_height/2), " ", (255, 255, 255), font=font)
+		overlay_renderer.update(img.tostring())
 		filename = config.file_path + now + '-0' + str(i+1) + '.jpg'
 		camera.capture(filename)
 		print(filename)
