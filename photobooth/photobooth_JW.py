@@ -429,7 +429,7 @@ show_image(real_path + "/assets/intro.png");
 
 try:
 	while True:
-		#GPIO.wait_for_edge(button1_pin, GPIO.FALLING)
+		GPIO.wait_for_edge(button1_pin, GPIO.FALLING)
 		time.sleep(0.2) #debounce
 		start_photobooth()
 finally:
