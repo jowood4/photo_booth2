@@ -141,6 +141,23 @@ def init_pygame():
 	pygame.mouse.set_visible(False) #hide the mouse cursor	
 	return pygame.display.set_mode(size, pygame.FULLSCREEN)
 
+def countdown():
+	overlay_renderer = None
+	for j in range(1,4):
+		img = Image.new("RGB", (monitor_w, monitor_h))
+		draw = ImageDraw.Draw(img)
+		draw.text((monitor_w/2,monitor_h/2), str(4-j), (255, 255, 255), font=font)
+		if not overlay_renderer:
+			overlay_renderer = camera.add_overlay(img.tostring(),layer=3,size=img.size,alpha=128);
+		else:
+			overlay_renderer.update(img.tostring())
+		sleep(1)
+
+	img = Image.new("RGB", (monitor_w, monitor_h))
+	draw = ImageDraw.Draw(img)
+	draw.text((monitor_w/2,monitor_h/2), " ", (255, 255, 255), font=font)
+	overlay_renderer.update(img.tostring())
+
 def show_image(image_path):
 	screen = init_pygame()
 	img=pygame.image.load(image_path) 
@@ -254,8 +271,6 @@ def start_photobooth():
 	camera.hflip = False
 	camera.start_preview()
 
-
-
 	sleep(2) #warm up camera
 
 	################################# Begin Step 2 #################################
@@ -264,6 +279,7 @@ def start_photobooth():
 	try: #take the photos
 		#for i, filename in enumerate(camera.capture_continuous(config.file_path + now + '-' + '{counter:02d}.jpg')):
 		for i in range(0, total_pics):
+			countdown()
 			filename = config.file_path + now + '-0' + str(i+1) + '.jpg'
 			camera.capture(filename)
 			GPIO.output(led2_pin,True) #turn on the LED
@@ -370,6 +386,27 @@ def start_photobooth():
 #choose one of the two following lines to be un-commented
 #GPIO.add_event_detect(button3_pin, GPIO.FALLING, callback=exit_photobooth, bouncetime=300) #use third button to exit python. Good while developing
 #GPIO.add_event_detect(button3_pin, GPIO.FALLING, callback=clear_pics, bouncetime=300) #use the third button to clear pics stored on the SD card from previous events
+
+
+# Check which frame buffer drivers are available
+# Start with fbcon since directfb hangs with composite output
+drivers = ['fbcon', 'directfb', 'svgalib']
+found = False
+for driver in drivers:
+    # Make sure that SDL_VIDEODRIVER is set
+    if not os.getenv('SDL_VIDEODRIVER'):
+        os.putenv('SDL_VIDEODRIVER', driver)
+    try:
+        pygame.display.init()
+    except pygame.error:
+        print 'Driver: {0} failed.'.format(driver)
+        continue
+    found = True
+    break
+
+if not found:
+    raise Exception('No suitable video driver found!')
+
 
 # delete files in folder on startup
 files = glob.glob(config.file_path + '*')
