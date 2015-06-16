@@ -33,6 +33,7 @@ def show_image(image_path, screen):
 	pygame.display.flip()
 
 def countdown():
+	overlay_renderer = None
 	for j in range(1,4):
 		img = Image.new("RGB", (monitor_w, monitor_h))
 		draw = ImageDraw.Draw(img)
@@ -120,8 +121,6 @@ camera.vflip = False
 camera.hflip = False
 
 font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSerif.ttf", 200)
-
-overlay_renderer = None
 
 camera.start_preview()
 
