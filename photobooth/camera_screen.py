@@ -32,6 +32,22 @@ def show_image(image_path, screen):
 	screen.blit(img,(offset_x,offset_y))
 	pygame.display.flip()
 
+def countdown():
+	for j in range(1,4):
+		img = Image.new("RGB", (monitor_w, monitor_h))
+		draw = ImageDraw.Draw(img)
+		draw.text((monitor_w/2,monitor_h/2), str(4-j), (255, 255, 255), font=font)
+		if not overlay_renderer:
+			overlay_renderer = camera.add_overlay(img.tostring(),layer=3,size=img.size,alpha=128);
+		else:
+			overlay_renderer.update(img.tostring())
+		sleep(1)
+
+	img = Image.new("RGB", (monitor_w, monitor_h))
+	draw = ImageDraw.Draw(img)
+	draw.text((monitor_w/2,monitor_h/2), " ", (255, 255, 255), font=font)
+	overlay_renderer.update(img.tostring())
+
 real_path = os.path.dirname(os.path.realpath(__file__))
 
 ########################
@@ -114,20 +130,7 @@ print "Taking pics"
 now = time.strftime("%Y-%m-%d-%H:%M:%S") #get the current date and time for the start of the filename
 try: #take the photos
 	for i in range(0, total_pics):
-		for j in range(1,4):
-			img = Image.new("RGB", (monitor_w, monitor_h))
-			draw = ImageDraw.Draw(img)
-			draw.text((monitor_w/2,monitor_h/2), str(4-j), (255, 255, 255), font=font)
-			if not overlay_renderer:
-				overlay_renderer = camera.add_overlay(img.tostring(),layer=3,size=img.size,alpha=128);
-			else:
-				overlay_renderer.update(img.tostring())
-			sleep(1)
-
-		img = Image.new("RGB", (monitor_w, monitor_h))
-		draw = ImageDraw.Draw(img)
-		draw.text((monitor_w/2,monitor_h/2), " ", (255, 255, 255), font=font)
-		overlay_renderer.update(img.tostring())
+		countdown()
 		filename = config.file_path + now + '-0' + str(i+1) + '.jpg'
 		camera.capture(filename)
 		print(filename)
