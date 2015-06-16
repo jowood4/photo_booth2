@@ -103,21 +103,26 @@ camera.resolution = (pixel_width, pixel_height)
 camera.vflip = False
 camera.hflip = False
 
-img = Image.new("RGB", (1024, 768))
-draw = ImageDraw.Draw(img)
-font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSerif.ttf", 32)
-draw.text((10,10), "Hello", (0, 255, 0), font=font)
+font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSerif.ttf", 128)
+
+overlay_renderer = None
 
 camera.start_preview()
-overlay_renderer = camera.add_overlay(img.tostring(),layer=3,size=img.size,alpha=128);
 
 print "Taking pics" 
-
-sleep(3)
 
 now = time.strftime("%Y-%m-%d-%H:%M:%S") #get the current date and time for the start of the filename
 try: #take the photos
 	for i in range(0, total_pics):
+		for j in range(0,3):
+			img = Image.new("RGB", (1024, 768))
+			draw = ImageDraw.Draw(img)
+			draw.text((pixel_width/2,pixel_height/2), str(j), (255, 255, 255), font=font)
+			if not overlay_renderer:
+				overlay_renderer = camera.add_overlay(img.tostring(),layer=3,size=img.size,alpha=128);
+			else:
+				overlay_renderer.update(img.tostring())
+			sleep(1)
 		filename = config.file_path + now + '-0' + str(i+1) + '.jpg'
 		camera.capture(filename)
 		print(filename)
