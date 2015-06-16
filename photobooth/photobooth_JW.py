@@ -143,7 +143,7 @@ def init_pygame():
 	pygame.mouse.set_visible(False) #hide the mouse cursor	
 	return pygame.display.set_mode(size, pygame.FULLSCREEN)
 
-def countdown():
+def countdown(camera):
 	overlay_renderer = None
 	for j in range(1,4):
 		img = Image.new("RGB", (monitor_w, monitor_h))
@@ -281,7 +281,7 @@ def start_photobooth():
 	try: #take the photos
 		#for i, filename in enumerate(camera.capture_continuous(config.file_path + now + '-' + '{counter:02d}.jpg')):
 		for i in range(0, total_pics):
-			countdown()
+			countdown(camera)
 			filename = config.file_path + now + '-0' + str(i+1) + '.jpg'
 			camera.capture(filename)
 			GPIO.output(led2_pin,True) #turn on the LED
@@ -428,7 +428,10 @@ GPIO.output(led4_pin,False);
 
 show_image(real_path + "/assets/intro.png");
 
-while True:
-	#GPIO.wait_for_edge(button1_pin, GPIO.FALLING)
-	time.sleep(0.2) #debounce
-	start_photobooth()
+try:
+	while True:
+		#GPIO.wait_for_edge(button1_pin, GPIO.FALLING)
+		time.sleep(0.2) #debounce
+		start_photobooth()
+finally:
+	cleanup()
