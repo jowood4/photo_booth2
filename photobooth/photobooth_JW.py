@@ -54,6 +54,8 @@ replay_cycles = 1 # how many times to show each photo on-screen after taking
 test_server = 'www.google.com'
 real_path = os.path.dirname(os.path.realpath(__file__))
 
+font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSerif.ttf", 200)
+
 # Setup the tumblr OAuth Client
 #client = pytumblr.TumblrRestClient(
 #   config.tumblr_consumer_key,
