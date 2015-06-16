@@ -265,15 +265,15 @@ def start_photobooth():
 	show_image(real_path + "/assets/blank.png")
 	
 	camera = picamera.PiCamera()
-	pixel_width = 1000 #originally 500: use a smaller size to process faster, and tumblr will only take up to 500 pixels wide for animated gifs
+	pixel_width = 800  #1000 #originally 500: use a smaller size to process faster, and tumblr will only take up to 500 pixels wide for animated gifs
 	#pixel_height = monitor_h * pixel_width // monitor_w #optimize for monitor size
-	pixel_height = 666
+	pixel_height = 480  #666
 	camera.resolution = (pixel_width, pixel_height) 
 	camera.vflip = False
 	camera.hflip = False
 	camera.start_preview()
 
-	sleep(2) #warm up camera
+	#sleep(2) #warm up camera
 
 	################################# Begin Step 2 #################################
 	print "Taking pics" 
