@@ -117,7 +117,7 @@ try: #take the photos
 		for j in range(1,4):
 			img = Image.new("RGB", (monitor_w, monitor_h))
 			draw = ImageDraw.Draw(img)
-			draw.text((pixel_width/2,pixel_height/2), str(4-j), (255, 255, 255), font=font)
+			draw.text((monitor_w/2,monitor_h/2), str(4-j), (255, 255, 255), font=font)
 			if not overlay_renderer:
 				overlay_renderer = camera.add_overlay(img.tostring(),layer=3,size=img.size,alpha=128);
 			else:
@@ -126,7 +126,7 @@ try: #take the photos
 
 		img = Image.new("RGB", (monitor_w, monitor_h))
 		draw = ImageDraw.Draw(img)
-		draw.text((pixel_width/2,pixel_height/2), " ", (255, 255, 255), font=font)
+		draw.text((monitor_w/2,monitor_h/2), " ", (255, 255, 255), font=font)
 		overlay_renderer.update(img.tostring())
 		filename = config.file_path + now + '-0' + str(i+1) + '.jpg'
 		camera.capture(filename)
