@@ -115,7 +115,7 @@ now = time.strftime("%Y-%m-%d-%H:%M:%S") #get the current date and time for the 
 try: #take the photos
 	for i in range(0, total_pics):
 		for j in range(1,4):
-			img = Image.new("RGB", (1024, 768))
+			img = Image.new("RGB", (monitor_w, monitor_h))
 			draw = ImageDraw.Draw(img)
 			draw.text((pixel_width/2,pixel_height/2), str(4-j), (255, 255, 255), font=font)
 			if not overlay_renderer:
@@ -124,7 +124,7 @@ try: #take the photos
 				overlay_renderer.update(img.tostring())
 			sleep(1)
 
-		img = Image.new("RGB", (1024, 768))
+		img = Image.new("RGB", (monitor_w, monitor_h))
 		draw = ImageDraw.Draw(img)
 		draw.text((pixel_width/2,pixel_height/2), " ", (255, 255, 255), font=font)
 		overlay_renderer.update(img.tostring())
