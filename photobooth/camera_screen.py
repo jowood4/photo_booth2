@@ -123,6 +123,7 @@ try: #take the photos
 			else:
 				overlay_renderer.update(img.tostring())
 			sleep(1)
+
 		img = Image.new("RGB", (1024, 768))
 		draw = ImageDraw.Draw(img)
 		draw.text((pixel_width/2,pixel_height/2), " ", (255, 255, 255), font=font)
