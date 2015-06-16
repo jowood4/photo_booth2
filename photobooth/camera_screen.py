@@ -114,10 +114,10 @@ print "Taking pics"
 now = time.strftime("%Y-%m-%d-%H:%M:%S") #get the current date and time for the start of the filename
 try: #take the photos
 	for i in range(0, total_pics):
-		for j in range(3,0):
+		for j in range(1,4):
 			img = Image.new("RGB", (1024, 768))
 			draw = ImageDraw.Draw(img)
-			draw.text((pixel_width/2,pixel_height/2), str(j), (255, 255, 255), font=font)
+			draw.text((pixel_width/2,pixel_height/2), str(4-j), (255, 255, 255), font=font)
 			if not overlay_renderer:
 				overlay_renderer = camera.add_overlay(img.tostring(),layer=3,size=img.size,alpha=128);
 			else:
