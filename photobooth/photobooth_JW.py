@@ -95,7 +95,7 @@ GPIO.output(led4_pin,False);
 def cleanup():
 	print('Ended abruptly')
 	GPIO.cleanup()
-	atexit.register(cleanup)
+	#atexit.register(cleanup)
 
 def shut_it_down(channel):  
 	print "Shutting down..." 
@@ -150,7 +150,7 @@ def countdown(camera):
 		draw = ImageDraw.Draw(img)
 		draw.text((monitor_w/2,monitor_h/2), str(4-j), (255, 255, 255), font=font)
 		if not overlay_renderer:
-			overlay_renderer = camera.add_overlay(img.tostring(),layer=3,size=img.size,alpha=128);
+			overlay_renderer = camera.add_overlay(img.tostring(),layer=3,size=img.size,alpha=28);
 		else:
 			overlay_renderer.update(img.tostring())
 		sleep(1)
