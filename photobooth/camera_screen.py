@@ -81,13 +81,8 @@ if not found:
     raise Exception('No suitable video driver found!')
 
 
-
-
-
 pygame.init()
-#raise KeyboardInterrupt
 size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
-#pygame.display.set_caption('Photo Booth Pics')
 pygame.mouse.set_visible(False) #hide the mouse cursor	
 screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
 ################################# Begin Step 1 ################################# 
@@ -100,11 +95,6 @@ sleep(prep_delay)
 show_image(real_path + "/assets/blank.png", screen)
 
 
-
-
-
-
-
 camera = picamera.PiCamera()
 pixel_width = 1000 #originally 500: use a smaller size to process faster, and tumblr will only take up to 500 pixels wide for animated gifs
 #pixel_height = monitor_h * pixel_width // monitor_w #optimize for monitor size
@@ -112,17 +102,6 @@ pixel_height = 666
 camera.resolution = (pixel_width, pixel_height) 
 camera.vflip = False
 camera.hflip = False
-#camera.start_preview()
-
-# prep a byte array to store captured image
-#rgb = bytearray(camera.resolution[0] * camera.resolution[1] * 3)
-
-
-
-
-# Display some text
-#font = pygame.font.Font(None, 36)
-#text = font.render("Hello There", 1, (0, 200, 0))
 
 img = Image.new("RGB", (1024, 768))
 draw = ImageDraw.Draw(img)
@@ -132,45 +111,25 @@ draw.text((10,10), "Hello", (0, 255, 0), font=font)
 camera.start_preview()
 overlay_renderer = camera.add_overlay(img.tostring(),layer=3,size=img.size,alpha=128);
 
-
-#stream = io.BytesIO()
-#camera.capture(stream, use_video_port=True, format='rgb', resize=(monitor_w, monitor_h))
-#stream.seek(0)
-#stream.readinto(rgb)
-#stream.close()
-
-#img = pygame.image.frombuffer(rgb[0:(monitor_w * monitor_h * 3)], (monitor_w, monitor_h), 'RGB')
-#screen.blit(img,(offset_x,offset_y))
-
-#screen.blit(text, (offset_x,offset_y))
-#pygame.display.update()
-
 print "Taking pics" 
-#now = time.strftime("%Y-%m-%d-%H:%M:%S") #get the current date and time for the start of the filename
-#try: #take the photos
-	#for i, filename in enumerate(camera.capture_continuous(config.file_path + now + '-' + '{counter:02d}.jpg')):
-	#print "Taking pics" 
-	#for i in range(0, total_pics):
-	#	filename = config.file_path + now + '-0' + str(i+1) + '.jpg'
-	#	print(filename)
-	#	camera.capture(filename)
-	#	GPIO.output(led2_pin,True) #turn on the LED
-	#	print(filename)
-	#	sleep(0.25) #pause the LED on for just a bit
-	#	GPIO.output(led2_pin,False) #turn off the LED
-	#	img = pygame.image.load(filename)
-    	#	screen.blit(img, (0, 0))
-	#	pygame.display.update()
-	#	sleep(capture_delay) # pause in-between shots
-	#	if i == total_pics-1:
-	#		break
 
-#finally:
+sleep(3)
 
-sleep(10)
-
-camera.stop_preview()
-camera.close()
+now = time.strftime("%Y-%m-%d-%H:%M:%S") #get the current date and time for the start of the filename
+try: #take the photos
+	for i in range(0, total_pics):
+		filename = config.file_path + now + '-0' + str(i+1) + '.jpg'
+		camera.capture(filename)
+		GPIO.output(led2_pin,True) #turn on the LED
+		print(filename)
+		sleep(0.25) #pause the LED on for just a bit
+		GPIO.output(led2_pin,False) #turn off the LED
+		sleep(capture_delay) # pause in-between shots
+		if i == total_pics-1:
+			break
+finally:
+	camera.stop_preview()
+	camera.close()
 
 
 
