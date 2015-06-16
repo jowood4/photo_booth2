@@ -120,10 +120,8 @@ try: #take the photos
 	for i in range(0, total_pics):
 		filename = config.file_path + now + '-0' + str(i+1) + '.jpg'
 		camera.capture(filename)
-		GPIO.output(led2_pin,True) #turn on the LED
 		print(filename)
 		sleep(0.25) #pause the LED on for just a bit
-		GPIO.output(led2_pin,False) #turn off the LED
 		sleep(capture_delay) # pause in-between shots
 		if i == total_pics-1:
 			break
