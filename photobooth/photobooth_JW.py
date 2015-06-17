@@ -31,7 +31,7 @@ led2_pin = 19 # LED 2 #19
 led3_pin = 21 # LED 3 #21
 led4_pin = 23 # LED 4 #23
 button1_pin = 22 # pin for the big red button
-button2_pin = 7 # pin for button to shutdown the pi 
+button2_pin = 7 # pin for printer switch 
 button3_pin = 11 # pin for button to end the program, but not shutdown the pi
 
 post_online = 0 # default 1. Change to 0 if you don't want to upload pics.
@@ -40,6 +40,10 @@ capture_delay = 2 # delay between pics
 prep_delay = 5 # number of seconds at step 1 as users prep to have photo taken
 gif_delay = 50 # How much time between frames in the animated gif
 restart_delay = 5 # how long to display finished message before beginning a new session
+paper_total = 16 # number of pages the printer can handle
+printed_count = 0 # number of pages printed since last refill
+printflag = False
+tweetflag = False
 
 monitor_w = 800 #800
 monitor_h = 480 #480
@@ -221,7 +225,13 @@ def print_pics(jpg_group):
 	print "Printing..."
 	#printing
 	printcommand = "lp -d Canon_CP910 " + config.file_path + now + "_print.jpg"
-	os.system(printcommand) 
+	os.system(printcommand)
+	if(printed_count == paper_total):
+		show_image(real_path + "/assets/empty_printer.png")
+		GPIO.wait_for_edge(button1_pin, GPIO.FALLING)
+		printed_count = 0
+	else:
+		printed_count = printed_count + 1
 
 def tweet_pics(jpg_group):
 	now = jpg_group
@@ -332,8 +342,6 @@ def start_photobooth():
 		traceback.print_exception(e.__class__, e, tb)
 	
 	########################### Begin Step 4 #################################
-	printflag = False
-	tweetflag = False
 	GPIO.output(led4_pin,True) #turn on the LED
 	try:
 		display_pics(now)
@@ -421,10 +429,13 @@ GPIO.output(led1_pin,False); #turn off the lights
 GPIO.output(led2_pin,False);
 GPIO.output(led3_pin,False);
 GPIO.output(led4_pin,False);
-GPIO.add_event_detect(button2_pin, GPIO.FALLING, callback=shut_it_down, bouncetime=300) 
+#GPIO.add_event_detect(button2_pin, GPIO.FALLING, callback=shut_it_down, bouncetime=300) 
 GPIO.add_event_detect(button3_pin, GPIO.FALLING, callback=exit_photobooth, bouncetime=300)
 
 show_image(real_path + "/assets/intro.png");
+
+if(GPIO.input(button2_pin) == 1):
+	printflag = True
 
 try:
 	while True:
