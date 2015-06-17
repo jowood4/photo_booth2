@@ -348,7 +348,7 @@ def start_photobooth():
 	except Exception, e:
 		tb = sys.exc_info()[2]
 		traceback.print_exception(e.__class__, e, tb)
-
+	print printflag
 	#check for tweeting or printing
 	for s in sys.argv:
 		if (s == "p"):
