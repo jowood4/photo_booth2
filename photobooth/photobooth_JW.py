@@ -42,8 +42,7 @@ gif_delay = 50 # How much time between frames in the animated gif
 restart_delay = 5 # how long to display finished message before beginning a new session
 paper_total = 16 # number of pages the printer can handle
 printed_count = 0 # number of pages printed since last refill
-printflag = False
-tweetflag = False
+printer_switch = 0
 
 monitor_w = 800 #800
 monitor_h = 480 #480
@@ -348,7 +347,9 @@ def start_photobooth():
 	except Exception, e:
 		tb = sys.exc_info()[2]
 		traceback.print_exception(e.__class__, e, tb)
-	print printflag
+
+	printflag = False
+	tweetflag = False
 	#check for tweeting or printing
 	for s in sys.argv:
 		if (s == "p"):
@@ -356,12 +357,13 @@ def start_photobooth():
 		if (s == "t"):
 			tweetflag = True
 	#PRINT MOSAIC if flag is set
-	if(printflag):
-		try:
-			print_pics(now)
-		except Exception, e:
-			tb = sys.exc_info()[2]
-			traceback.print_exception(e.__class__, e, tb)
+	if(printer_switch == 1):
+		if(printflag):
+			try:
+				print_pics(now)
+			except Exception, e:
+				tb = sys.exc_info()[2]
+				traceback.print_exception(e.__class__, e, tb)
 
 	# TWEET PICS if flag is set
 	if(tweetflag):
@@ -435,7 +437,7 @@ GPIO.add_event_detect(button3_pin, GPIO.FALLING, callback=exit_photobooth, bounc
 show_image(real_path + "/assets/intro.png");
 
 if(GPIO.input(button2_pin) == 1):
-	printflag = True
+	printer_switch = True
 
 try:
 	while True:
