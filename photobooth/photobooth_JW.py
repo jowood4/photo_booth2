@@ -220,6 +220,8 @@ def create_mosaic(jpg_group):
 	new_pic.save(config.file_path + now + '_total.jpg')
 	try:
 		new_pic.save('/media/PIHARDDRIVE/' + now + '_total.jpg')
+	else:
+		print "Flash drive not found"
 
 def print_pics(jpg_group):
 	now = jpg_group
